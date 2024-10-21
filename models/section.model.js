@@ -44,6 +44,9 @@ const SectionSchema = new Schema(
         default: "",
       },
     },
+    authorName:{
+      type:String
+    },
     page: {
       type: String, // e.g., 'home', 'about', 'services'
       required: true,

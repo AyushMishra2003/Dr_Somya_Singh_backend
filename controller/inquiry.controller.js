@@ -6,6 +6,12 @@ const addInquiry = async (req, res, next) => {
     try {
         const { fullName, email, phoneNumber, message } = req.body;
 
+        console.log(req.body);
+        
+
+        console.log("hi i am coming or not ");
+        
+
         // Validate input fields
         if (!fullName || !email || !phoneNumber || !message) {
             return next(new AppError("All fields are required", 400));
@@ -24,7 +30,7 @@ const addInquiry = async (req, res, next) => {
         });
 
         if (!inquiry) {
-            return next(new AppError("Inquiry not sent, something went wrong", 400));
+            return next(new AppError("Inquiry not sent, something went wrong", 402));
         }
 
         // Nodemailer configuration to send email
@@ -39,7 +45,7 @@ const addInquiry = async (req, res, next) => {
         // Prepare email details
         const mailOptions = {
             from: process.env.EMAIL_USER, // Sender's email
-            to: 'ayushm185@gmail.com',  // Forwarded email (the recipient)
+            to: 'aggarwal.manas@gmail.com',  // Forwarded email (the recipient)
             subject: 'New Inquiry Received',
             text: `You have received a new inquiry from:\n\n` +
                   `Name: ${fullName}\n` +

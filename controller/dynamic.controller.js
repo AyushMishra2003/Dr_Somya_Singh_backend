@@ -33,6 +33,9 @@ const createPage = async (req, res) => {
 const createSection = async (req, res,next) => {
   const { title, description, page } = req.body;
 
+  console.log("req body mai",req.body);
+  
+
   try {
     // Check if a section with the same title already exists
     let section = await SectionModel.findOne({ title });
@@ -78,6 +81,7 @@ const createSection = async (req, res,next) => {
         title,
         description,
         page,
+        authorName,
         photo: {
           public_id: "",
           secure_url: "",
@@ -127,6 +131,95 @@ const createSection = async (req, res,next) => {
     console.log(error);
     
      return next(new AppError(error.message,500))
+  }
+};
+
+const editSection = async (req, res,next) => {
+  const { title, description, page } = req.body;
+
+  try {
+    // Check if a section with the same title already exists
+    let section = await SectionModel.findOne({ title });
+
+    // if (section) {
+      // If the section exists, update the description and photo (if provided)
+      section.description = description || section.description;
+
+      // If a new file is uploaded, update the photo
+      if (req.file) {
+        console.log("File Upload:", req.file);
+
+        // Normalize the path to avoid issues with backslashes on Windows
+        const normalizedPath = path.resolve(req.file.path).replace(/\\/g, '/');
+
+        const result = await cloudinary.v2.uploader.upload(normalizedPath, {
+          folder: "lms",
+        });
+
+        if (result) {
+          // Update the photo field with the new file's details
+          section.photo = {
+            public_id: result.public_id,
+            secure_url: result.secure_url,
+          };
+        }
+
+        // Remove the file using fs.unlinkSync
+        fs.unlinkSync(req.file.path); // Ensure correct file removal
+      }
+
+      // Save the updated section
+      await section.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Section updated successfully!",
+        section,
+      });
+    // } 
+  } catch (error) {
+    console.log(error);
+    
+     return next(new AppError(error.message,500))
+  }
+};
+
+const deleteSection = async (req, res, next) => {
+  const {id} = req.params; // Assuming the section ID is passed as a parameter
+
+  try {
+    // Find the section by ID
+    const section = await SectionModel.findById(id);
+
+    if (!section) {
+      return res.status(404).json({
+        success: false,
+        message: "Section not found!",
+      });
+    }
+
+    // Check if there is an associated image (photo) for the section (if your model has photos)
+    if (section.photo && section.photo.public_id) {
+      // Delete the image from Cloudinary (if applicable)
+      await cloudinary.v2.uploader.destroy(section.photo.public_id, (error, result) => {
+        if (error) {
+          console.log("Cloudinary Deletion Error:", error);
+          return next(new AppError("Failed to delete image from Cloudinary", 500));
+        }
+      });
+    }
+
+    // Delete the section (parent structure), including its children if they exist
+    await SectionModel.findByIdAndDelete(id);
+
+    // Respond with success
+    res.status(200).json({
+      success: true,
+      message: "Section deleted successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    return next(new AppError(error.message, 500));
   }
 };
 
@@ -345,4 +438,6 @@ export {
   addChildrenToSection,
   getAllPages,
   getSpecificSection,
+  deleteSection,
+  editSection
 };
