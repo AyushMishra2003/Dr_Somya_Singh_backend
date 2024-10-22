@@ -30,6 +30,7 @@ app.use(
       "https://ayush.webakash1806.com",
       "https://ucscab.com",
       "https://master.ucscab.com",
+      "https://drmanasaggrawalji.netlify.app"
     ],
     credentials: true,
   })
