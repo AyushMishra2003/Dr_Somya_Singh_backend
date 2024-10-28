@@ -20,6 +20,6 @@ const pageSchema = new Schema(
   }
 );
 
-const PageModel = model("ManasPage", pageSchema);
+const PageModel = model("SomyaPage", pageSchema);
 
 export default PageModel;

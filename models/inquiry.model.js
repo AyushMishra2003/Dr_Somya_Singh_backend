@@ -20,7 +20,7 @@ const inquirySchema=new Schema(
     }
 )
 
-const InquiryModel=model("DR_MANAS_MODEL",inquirySchema)
+const InquiryModel=model("DR_SOMYA_ENQUIRY",inquirySchema)
 
 export default InquiryModel
 

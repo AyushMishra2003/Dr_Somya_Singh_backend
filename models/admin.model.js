@@ -57,7 +57,7 @@ const adminScheama=new Schema(
   
 
 
-const Admin=model("DrManas_Admin",adminScheama)
+const Admin=model("Dr_Somya_Admin",adminScheama)
 
 
 export default Admin

@@ -59,6 +59,6 @@ const SectionSchema = new Schema(
   }
 );
 
-const SectionModel = model("ManasSectionSchema", SectionSchema);
+const SectionModel = model("SomyaSectionSchema", SectionSchema);
 
 export default SectionModel;

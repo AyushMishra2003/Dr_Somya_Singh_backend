@@ -45,7 +45,7 @@ const addInquiry = async (req, res, next) => {
         // Prepare email details
         const mailOptions = {
             from: process.env.EMAIL_USER, // Sender's email
-            to: 'aggarwal.manas@gmail.com',  // Forwarded email (the recipient)
+            to: 'saumya.751983@gmail.com',  // Forwarded email (the recipient)
             subject: 'New Inquiry Received',
             text: `You have received a new inquiry from:\n\n` +
                   `Name: ${fullName}\n` +
