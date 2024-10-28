@@ -81,7 +81,6 @@ const createSection = async (req, res,next) => {
         title,
         description,
         page,
-        authorName,
         photo: {
           public_id: "",
           secure_url: "",
